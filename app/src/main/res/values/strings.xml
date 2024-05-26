@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RandomProductivity</string>
+    <string name="new_task">New Task</string>
+    <string name="task_list">Task List:</string>
+    <string name="add_new_task">Add New Task</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
