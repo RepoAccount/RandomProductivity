@@ -3,6 +3,10 @@
     <string name="new_task">New Task</string>
     <string name="task_list">Task List:</string>
     <string name="add_new_task">Add New Task</string>
+    <string name="shuffle_tasks">Shuffle Tasks</string>
+    <string name="no_task">None</string>
+    <string name="current_task">Current task:</string>
+    <string name="shuffling">Shuffling: </string>
     <string name="name">Name</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
