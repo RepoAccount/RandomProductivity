@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,18 +64,18 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
     }
 
     task?.let { thisTask ->
-        var priority by remember { mutableStateOf(thisTask.priority.toString()) }
-        var hideFromShuffler by remember { mutableStateOf(thisTask.hideFromShuffler) }
-        var notify by remember { mutableStateOf(thisTask.notify) }
+        var priority by rememberSaveable { mutableStateOf(thisTask.priority.toString()) }
+        var hideFromShuffler by rememberSaveable { mutableStateOf(thisTask.hideFromShuffler) }
+        var notify by rememberSaveable { mutableStateOf(thisTask.notify) }
         val currentTask by taskViewModel.currentTask.observeAsState()
-        var dueDate by remember { mutableStateOf(thisTask.dueDate?.let { dateFormat.format(it) } ?: "") }
-        var showDatePickerDialog by remember { mutableStateOf(false) }
-        var goalAmount by remember { mutableStateOf(thisTask.goalAmount?.toString() ?: "") }
-        var trackTime by remember { mutableStateOf(task?.trackTime ?: false) }
-        var showTimeInputDialog by remember { mutableStateOf(false) }
-        var timeSpent by remember { mutableStateOf("") }
-        var newTaskName by remember { mutableStateOf(thisTask.name) }
-        var showDeleteConfirm by remember { mutableStateOf(false) }
+        var dueDate by rememberSaveable { mutableStateOf(thisTask.dueDate?.let { dateFormat.format(it) } ?: "") }
+        var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
+        var goalAmount by rememberSaveable { mutableStateOf(thisTask.goalAmount?.toString() ?: "") }
+        var trackTime by rememberSaveable { mutableStateOf(task?.trackTime ?: false) }
+        var showTimeInputDialog by rememberSaveable { mutableStateOf(false) }
+        var timeSpent by rememberSaveable { mutableStateOf("") }
+        var newTaskName by rememberSaveable { mutableStateOf(thisTask.name) }
+        var showDeleteConfirm by rememberSaveable { mutableStateOf(false) }
 
         val stats = if (trackTime) {
             statisticViewModel.getWeekTimeSpent(thisTask.id).observeAsState(emptyMap())
@@ -82,7 +83,7 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
             statisticViewModel.getWeekCompletionCount(thisTask.id).observeAsState(emptyMap())
         }
 
-        val statsData = remember(stats.value) { stats.value }
+        val statsData = rememberSaveable(stats.value) { stats.value }
 
         if (showDatePickerDialog) {
             DatePickerDialog(

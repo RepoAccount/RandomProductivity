@@ -8,7 +8,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import sk.uniza.fri.boorova2.randomproductivity.R
@@ -18,7 +18,7 @@ import sk.uniza.fri.boorova2.randomproductivity.database.entities.TaskEntity
 fun TaskCreationDialog(showDialog: Boolean, onDismiss: () -> Unit, onSave: (TaskEntity) -> Unit) {
     if (showDialog) {
 
-        var title by remember { mutableStateOf("") }
+        var title by rememberSaveable { mutableStateOf("") }
 
         AlertDialog(
 
