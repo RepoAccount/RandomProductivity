@@ -54,4 +54,11 @@ class TaskViewModel
             }
         }
     }
+
+    fun removeTask(taskId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            taskDao.deleteTask(taskDao.getTaskById(taskId)!!)
+        }
+    }
+
 }

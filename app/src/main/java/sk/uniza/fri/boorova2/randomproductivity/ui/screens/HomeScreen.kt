@@ -27,15 +27,12 @@ import kotlinx.coroutines.delay
 import sk.uniza.fri.boorova2.randomproductivity.R
 import sk.uniza.fri.boorova2.randomproductivity.ui.composables.TaskCreationDialog
 import sk.uniza.fri.boorova2.randomproductivity.ui.composables.TaskList
-// import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.StatisticViewModel
 import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.TaskViewModel
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: TaskViewModel,
-               /*statisticViewModel: StatisticViewModel*/) {
+fun HomeScreen(navController: NavController, viewModel: TaskViewModel) {
 
     val tasks by viewModel.allTasks.observeAsState(emptyList())
-    // val allStatistics by statisticViewModel.getAllStatistics().observeAsState(emptyList())
     var showDialog by remember { mutableStateOf(false) }
     var isShuffling by remember { mutableStateOf(false) }
     val currentTask by viewModel.currentTask.observeAsState()

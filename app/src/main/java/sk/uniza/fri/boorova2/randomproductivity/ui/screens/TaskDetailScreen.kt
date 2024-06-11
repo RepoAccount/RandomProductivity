@@ -35,9 +35,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import sk.uniza.fri.boorova2.randomproductivity.R
 import sk.uniza.fri.boorova2.randomproductivity.database.entities.TaskEntity
-import sk.uniza.fri.boorova2.randomproductivity.ui.composables.WeeklyStatisticsChart
+import sk.uniza.fri.boorova2.randomproductivity.ui.composables.StatisticChart
 import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.StatisticViewModel
 import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.TaskDetailViewModel
 import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.TaskViewModel
@@ -48,7 +49,7 @@ import java.util.Locale
 @Composable
 fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: Long,
                      onTaskUpdated: (TaskEntity) -> Unit, taskViewModel: TaskViewModel,
-                     statisticViewModel: StatisticViewModel
+                     statisticViewModel: StatisticViewModel, navController: NavController
 ) {
     val task by viewModel.selectedTask.observeAsState()
     var showGoalReachedPopup by remember { mutableStateOf(false) }
@@ -60,7 +61,6 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
     }
 
     task?.let { thisTask ->
-        val title by remember { mutableStateOf(thisTask.name) }
         var priority by remember { mutableStateOf(thisTask.priority.toString()) }
         var hideFromShuffler by remember { mutableStateOf(thisTask.hideFromShuffler) }
         var notify by remember { mutableStateOf(thisTask.notify) }
@@ -71,6 +71,8 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
         var trackTime by remember { mutableStateOf(task?.trackTime ?: false) }
         var showTimeInputDialog by remember { mutableStateOf(false) }
         var timeSpent by remember { mutableStateOf("") }
+        var newTaskName by remember { mutableStateOf(thisTask.name) }
+        var showDeleteConfirm by remember { mutableStateOf(false) }
 
         val stats = if (trackTime) {
             statisticViewModel.getWeekTimeSpent(thisTask.id).observeAsState(emptyMap())
@@ -111,6 +113,32 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
             )
         }
 
+        if (showDeleteConfirm) {
+            AlertDialog(
+                onDismissRequest = { showDeleteConfirm = false },
+                title = { Text(stringResource(R.string.confirm_delete)) },
+                text = { Text(stringResource(R.string.confirm_delete_message)) },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            taskViewModel.removeTask(thisTask.id)
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Text(stringResource(R.string.delete))
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { showDeleteConfirm = false }
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
+            )
+        }
+
+
         LaunchedEffect(task?.progress) {
             if (task?.goalAmount != null && (task?.progress ?: 0) >= (task!!.goalAmount
                     ?: Int.MAX_VALUE)
@@ -123,12 +151,12 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
             item {
 
                 Box(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
-                    WeeklyStatisticsChart(statsData)
+                    StatisticChart(statsData)
                 }
 
                 Button(
                     onClick = {
-                        // TODO: Navigate to stats screen
+                        navController.navigate("statistics")
                     },
                     modifier = Modifier.fillMaxWidth()
                         .padding(start = 30.dp, end = 30.dp),
@@ -167,6 +195,29 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
                     ) {
                         Text(stringResource(R.string.drop_task))
                     }
+                }
+
+                HorizontalDivider(
+                    color = Color.DarkGray, thickness = 1.dp,
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(30.dp)
+                )
+
+                TextField(
+                    value = newTaskName,
+                    onValueChange = { newTaskName = it },
+                    label = { Text(stringResource(R.string.rename_task)) },
+                    modifier = Modifier.padding(horizontal = 30.dp).fillMaxWidth()
+                )
+
+                Button(
+                    onClick = {
+                        showDeleteConfirm = true
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp, top = 10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text(stringResource(R.string.delete_task))
                 }
 
                 HorizontalDivider(
@@ -311,7 +362,7 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
                         }
 
                         val updatedTask = thisTask.copy(
-                            name = title,
+                            name = newTaskName,
                             priority = priority.toIntOrNull() ?: thisTask.priority,
                             hideFromShuffler = hideFromShuffler,
                             dueDate = dueDate.takeIf { it.isNotBlank() }

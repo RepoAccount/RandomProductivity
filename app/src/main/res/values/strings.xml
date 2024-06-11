@@ -8,7 +8,7 @@
     <string name="current_task">Current task:</string>
     <string name="shuffling">Shuffling: </string>
     <string name="name">Name</string>
-    <string name="save">Save Changes</string>
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="complete_task">Complete Task</string>
     <string name="drop_task">Drop Task</string>
@@ -23,4 +23,17 @@
     <string name="time_spent">Time Spent:</string>
     <string name="enter_time_spent">Time spent (in minutes)</string>
     <string name="see_more_stats">See More Stats</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="best_task">Best task:</string>
+    <string name="best_day">Best day:</string>
+    <string name="none">None</string>
+    <string name="monthly_time">Monthly Time</string>
+    <string name="back_to_task">Back to Task</string>
+    <string name="rename_task">Rename Task</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this task?</string>
+    <string name="delete">Delete</string>
+
 </resources>
