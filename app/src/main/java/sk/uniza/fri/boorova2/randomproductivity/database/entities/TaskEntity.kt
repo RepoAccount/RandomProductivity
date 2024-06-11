@@ -10,6 +10,11 @@ data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "priority") val priority: Int = 1,
+    @ColumnInfo(name = "hide_from_shuffler") val hideFromShuffler: Boolean = false,
     @ColumnInfo(name = "due_date") val dueDate: Date? = null,
-    @ColumnInfo(name = "is_completed") val isCompleted: Boolean = false
+    @ColumnInfo(name = "notify") val notify: Boolean = false,
+    @ColumnInfo(name = "completion_count") val completionCount: Int = 0,
+    @ColumnInfo(name = "completion_dates") val completionDates: List<Date> = emptyList(),
+    @ColumnInfo(name = "goal_amount") val goalAmount: Int? = null,
+    @ColumnInfo(name = "progress") val progress: Int = 0
 )

@@ -8,6 +8,14 @@
     <string name="current_task">Current task:</string>
     <string name="shuffling">Shuffling: </string>
     <string name="name">Name</string>
-    <string name="save">Save</string>
+    <string name="save">Save Changes</string>
     <string name="cancel">Cancel</string>
+    <string name="complete_task">Complete Task</string>
+    <string name="drop_task">Drop Task</string>
+    <string name="select_task">Select Task</string>
+    <string name="priority">Priority:</string>
+    <string name="hide">Hide from random:</string>
+    <string name="deadline">Deadline:</string>
+    <string name="notify">Notifications:</string>
+    <string name="goal">Goal:</string>
 </resources>

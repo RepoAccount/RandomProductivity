@@ -1,7 +1,7 @@
-package sk.uniza.fri.boorova2.randomproductivity.database;
+package sk.uniza.fri.boorova2.randomproductivity.database
 
 import android.content.Context
-import androidx.room.Database;
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -9,9 +9,10 @@ import sk.uniza.fri.boorova2.randomproductivity.database.dao.StatisticDao
 import sk.uniza.fri.boorova2.randomproductivity.database.dao.TaskDao
 import sk.uniza.fri.boorova2.randomproductivity.database.entities.StatisticEntity
 import sk.uniza.fri.boorova2.randomproductivity.database.entities.TaskEntity
-import kotlin.jvm.Volatile;
+import kotlin.jvm.Volatile
 
-@Database(entities = [TaskEntity::class, StatisticEntity::class], version = 1)
+@Suppress("unused")
+@Database(entities = [TaskEntity::class, StatisticEntity::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
@@ -27,7 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         "random_productivity_db"
-                    ).build()
+                    ).fallbackToDestructiveMigration().build()
                     INSTANCE = instance
                     instance
                 }
