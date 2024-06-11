@@ -12,7 +12,7 @@ import sk.uniza.fri.boorova2.randomproductivity.database.entities.TaskEntity
 import kotlin.jvm.Volatile
 
 @Suppress("unused")
-@Database(entities = [TaskEntity::class, StatisticEntity::class], version = 2)
+@Database(entities = [TaskEntity::class, StatisticEntity::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao

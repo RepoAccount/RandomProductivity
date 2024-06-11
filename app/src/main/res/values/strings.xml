@@ -14,8 +14,13 @@
     <string name="drop_task">Drop Task</string>
     <string name="select_task">Select Task</string>
     <string name="priority">Priority:</string>
-    <string name="hide">Hide from random:</string>
+    <string name="hide">Hide from Shuffle:</string>
     <string name="deadline">Deadline:</string>
-    <string name="notify">Notifications:</string>
+    <string name="notify">Notifications?</string>
     <string name="goal">Goal:</string>
+    <string name="goal_done">Congratulations! You\'ve completed your goal.</string>
+    <string name="time_track">Track Time?</string>
+    <string name="time_spent">Time Spent:</string>
+    <string name="enter_time_spent">Time spent (in minutes)</string>
+    <string name="see_more_stats">See More Stats</string>
 </resources>

@@ -9,17 +9,19 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import sk.uniza.fri.boorova2.randomproductivity.ui.screens.HomeScreen
 import sk.uniza.fri.boorova2.randomproductivity.ui.screens.TaskDetailScreen
+import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.StatisticViewModel
 import sk.uniza.fri.boorova2.randomproductivity.ui.viewmodels.TaskViewModel
 
 @Composable
 fun NavGraph(startDestination: String = "home") {
     val navController = rememberNavController()
-    val sharedViewModel: TaskViewModel = hiltViewModel()
-
+    val taskViewModel: TaskViewModel = hiltViewModel()
+    val statisticViewModel: StatisticViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable("home") {
-            HomeScreen(navController = navController, viewModel = sharedViewModel)
+            HomeScreen(navController = navController, viewModel = taskViewModel,
+                /*statisticViewModel = statisticViewModel*/)
         }
         composable(
             "taskDetail/{taskId}",
@@ -30,7 +32,7 @@ fun NavGraph(startDestination: String = "home") {
             val taskId = backStackEntry.arguments?.getLong("taskId") ?: 0L
             TaskDetailScreen(taskId = taskId, onTaskUpdated = {
                 navController.popBackStack()
-            }, sharedViewModel = sharedViewModel)
+            }, taskViewModel = taskViewModel, statisticViewModel = statisticViewModel)
         }
     }
 }

@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import sk.uniza.fri.boorova2.randomproductivity.database.AppDatabase
+import sk.uniza.fri.boorova2.randomproductivity.database.dao.StatisticDao
 import sk.uniza.fri.boorova2.randomproductivity.database.dao.TaskDao
 import javax.inject.Singleton
 
@@ -23,5 +24,11 @@ object AppModule {
     @Singleton
     fun provideTaskDao(db: AppDatabase): TaskDao {
         return db.taskDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStatisticDao(db: AppDatabase): StatisticDao {
+        return db.statisticDao()
     }
 }

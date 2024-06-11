@@ -18,4 +18,7 @@ interface StatisticDao {
     @Delete
     fun deleteStatistic(statistic: StatisticEntity)
 
+    @Query("SELECT * FROM statistics WHERE task_id = :taskId")
+    fun getStatisticsByTaskId(taskId: Long): LiveData<List<StatisticEntity>>
+
 }
