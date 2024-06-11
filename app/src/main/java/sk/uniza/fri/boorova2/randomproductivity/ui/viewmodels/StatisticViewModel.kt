@@ -99,7 +99,4 @@ class StatisticViewModel @Inject constructor(private val statisticDao: Statistic
                 .mapValues { entry -> entry.value.sumOf { it.timeSpent } }
         }
     }
-
-
-
 }

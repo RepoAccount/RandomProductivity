@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
 @Composable
 fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: Long,
                      onTaskUpdated: (TaskEntity) -> Unit, taskViewModel: TaskViewModel,
@@ -55,6 +56,7 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
     var showGoalReachedPopup by remember { mutableStateOf(false) }
     val calendar = remember { Calendar.getInstance() }
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val context = LocalContext.current
 
     LaunchedEffect(taskId) {
         viewModel.loadTask(taskId)
@@ -378,6 +380,8 @@ fun TaskDetailScreen(viewModel: TaskDetailViewModel = hiltViewModel(), taskId: L
                         }
 
                         viewModel.updateTaskDetails(updatedTask)
+                        taskViewModel.cancelTaskNotifications(context, thisTask.id)
+                        taskViewModel.scheduleTaskNotification(context, updatedTask)
 
                         if (!showGoalReachedPopup) {
                             onTaskUpdated(updatedTask)

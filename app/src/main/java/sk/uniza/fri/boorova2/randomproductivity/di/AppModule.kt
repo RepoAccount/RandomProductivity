@@ -2,6 +2,7 @@ package sk.uniza.fri.boorova2.randomproductivity.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,4 +32,11 @@ object AppModule {
     fun provideStatisticDao(db: AppDatabase): StatisticDao {
         return db.statisticDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(app: Application): WorkManager {
+        return WorkManager.getInstance(app)
+    }
+
 }

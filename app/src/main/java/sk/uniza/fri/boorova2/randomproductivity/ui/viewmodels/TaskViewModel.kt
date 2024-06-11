@@ -6,11 +6,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sk.uniza.fri.boorova2.randomproductivity.database.dao.TaskDao
 import sk.uniza.fri.boorova2.randomproductivity.database.entities.TaskEntity
+import sk.uniza.fri.boorova2.randomproductivity.util.NotificationWorker
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,6 +65,49 @@ class TaskViewModel
         viewModelScope.launch(Dispatchers.IO) {
             taskDao.deleteTask(taskDao.getTaskById(taskId)!!)
         }
+    }
+
+    fun scheduleTaskNotification(context: Context, task: TaskEntity) {
+        if (task.dueDate != null && task.notify) {
+            val workManager = WorkManager.getInstance(context)
+
+            val calendar = Calendar.getInstance().apply {
+                time = task.dueDate
+                set(Calendar.HOUR_OF_DAY, 14)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
+
+            val oneWeekBefore = calendar.timeInMillis - TimeUnit.DAYS.toMillis(7)
+            val oneDayBefore = calendar.timeInMillis - TimeUnit.DAYS.toMillis(1)
+
+            val data = workDataOf(
+                "taskName" to task.name,
+                "taskId" to task.id
+            )
+
+            if (oneWeekBefore > System.currentTimeMillis()) {
+                val oneWeekRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(oneWeekBefore - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                    .setInputData(data)
+                    .addTag(task.id.toString())
+                    .build()
+                workManager.enqueue(oneWeekRequest)
+            }
+
+            if (oneDayBefore > System.currentTimeMillis()) {
+                val oneDayRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(oneDayBefore - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                    .setInputData(data)
+                    .addTag(task.id.toString())
+                    .build()
+                workManager.enqueue(oneDayRequest)
+            }
+        }
+    }
+
+    fun cancelTaskNotifications(context: Context, taskId: Long) {
+        WorkManager.getInstance(context).cancelAllWorkByTag(taskId.toString())
     }
 
 }
